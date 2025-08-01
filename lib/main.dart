@@ -5,6 +5,7 @@ import 'map/presentation/map_google.dart';
 // Api Key
 // AIzaSyBs_mYBIEbsXXH_lnqrp5bx04CpVlK89rE
 void main() {
+
   // WidgetsFlutterBinding.ensureInitialized();
   runApp(ProviderScope(child: const MyApp()));
 }
