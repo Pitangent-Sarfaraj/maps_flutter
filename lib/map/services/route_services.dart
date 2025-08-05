@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,27 +17,39 @@ class RouteResult {
   });
 
   bool get hasError => errorMessage != null;
-
   bool get isEmpty => coordinates.isEmpty;
 }
 
 class RouteService {
-  final Dio _dio = Dio();
   late final PolylinePoints _polylinePoints;
-  static const String _baseUrl =
-      'https://maps.googleapis.com/maps/api/directions/json';
-  static const String _apiKey="";
 
   RouteService() {
     _polylinePoints = PolylinePoints(apiKey: MapConstants.apiKey);
   }
 
+  Polyline createPolyline(
+      List<LatLng> coordinates, {
+        String id = 'route',
+        Color color = Colors.blue,
+        int width = 5,
+        bool geodesic = true,
+      }) {
+    return Polyline(
+      polylineId: PolylineId(id),
+      color: color,
+      points: coordinates,
+      width: width,
+      geodesic: geodesic,
+    );
+  }
+
+
   Future<RouteResult> getRouteCoordinates(
-    LatLng origin,
-    LatLng destination, {
-    TravelMode travelMode = TravelMode.driving,
-    Duration? timeout, // ADD THIS PARAMETER
-  }) async {
+      LatLng origin,
+      LatLng destination, {
+        TravelMode travelMode = TravelMode.driving,
+        Duration? timeout,
+      }) async {
     try {
       final request = PolylineRequest(
         origin: PointLatLng(origin.latitude, origin.longitude),
@@ -74,17 +85,4 @@ class RouteService {
     }
   }
 
-  Polyline createPolyline(
-    List<LatLng> coordinates, {
-    String id = 'route',
-    Color color = Colors.blue,
-    int width = 5,
-  }) {
-    return Polyline(
-      polylineId: PolylineId(id),
-      color: color,
-      points: coordinates,
-      width: width,
-    );
-  }
 }
